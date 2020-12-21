@@ -18,12 +18,9 @@ class JsonSerializer (
 
     @Throws(IOException::class, JSONException::class)
     fun save(homeworks: ArrayList<Homework>) {
-        // Make an array in JSON format
         val jArray = JSONArray()
-        // And load it with the homeworks
         for (h in homeworks)
             jArray.put(h.convertToJSON())
-        // Now write it to the private disk space of our app
         var writer: Writer? = null
         try {
             val out = context.openFileOutput(filename,
@@ -54,10 +51,7 @@ class JsonSerializer (
                 homeworkList.add(Homework(jArray.getJSONObject(i)))
             }
         } catch (e: FileNotFoundException) {
-            // we will ignore this one, since it happens
-            // when we start fresh. You could add a log here.
         } finally {
-            // This will always run
             reader!!.close()
         }
         return homeworkList

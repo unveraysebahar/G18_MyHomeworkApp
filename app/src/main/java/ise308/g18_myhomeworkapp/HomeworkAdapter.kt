@@ -1,5 +1,6 @@
 package ise308.g18_myhomeworkapp
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,8 @@ class HomeworkAdapter(
             view.setOnClickListener(this)
         }
         override fun onClick(view: View) {
-            mainActivity.showHomework(adapterPosition)
+            val intentToHomeworkPager= Intent(view!!.context, HomeworkPagerActivity::class.java)
+            view.context.startActivity(intentToHomeworkPager)
         }
     }
 
@@ -60,9 +62,6 @@ class HomeworkAdapter(
             homework.done -> holder.done.text =
                 mainActivity.resources.getString(R.string.done_text)
         }
-
-        // TO DO
-        // Decide whether to show deadline or not
 
     }
 

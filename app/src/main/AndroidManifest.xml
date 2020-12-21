@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.G18_MyHomeworkApp">
+        <activity android:name=".HomeworkPagerActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

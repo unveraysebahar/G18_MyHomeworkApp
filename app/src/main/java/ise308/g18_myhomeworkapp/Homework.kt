@@ -11,7 +11,6 @@ class Homework {
     var description: String? = null
     var workload: Int? = null
     var deadline: String? = null
-    // TODO : The deadline feature should be displayed in detailed assignment information
     var done: Boolean = false
 
     private val JSON_TITLE = "Title"
@@ -20,8 +19,6 @@ class Homework {
     private val JSON_WORKLOAD = "Workload"
     private val JSON_DEADLINE = "Deadline"
     private val JSON_DONE = "Done"
-
-    // Constructor
 
     @Throws(JSONException::class)
     constructor(jo: JSONObject) {
@@ -32,8 +29,6 @@ class Homework {
         deadline = jo.getString(JSON_DEADLINE)
         done = jo.getBoolean(JSON_DONE)
     }
-
-    // Now we must provide an empty default constructor for
 
     constructor() {
     }

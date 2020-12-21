@@ -16,8 +16,8 @@ class NewHomework : DialogFragment() {
     override
     fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(activity!!)
-        val inflater = activity!!.layoutInflater
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
 
         val dialogView = inflater.inflate(R.layout.new_homework, null)
 
@@ -56,7 +56,7 @@ class NewHomework : DialogFragment() {
             newHomework.courseTitle = editCourseTitle.text.toString()
             newHomework.description = editDescription.text.toString()
             newHomework.deadline = editDeadline.text.toString()
-            newHomework.workload = editWorkload.inputType // TODO: Search
+            newHomework.workload = editWorkload.text.toString().toInt() // TODO: Search
             newHomework.done = checkBoxDone.isChecked
 
             val callingActivity = activity as MainActivity?

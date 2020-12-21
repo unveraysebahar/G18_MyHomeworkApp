@@ -73,10 +73,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun showHomework(adapterPosition: Int) {
-
-    }
-
     private fun saveHomeworks() {
         try {
             serializer!!.save(this.homeworkList!!)
@@ -107,7 +103,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
         saveHomeworks()
     }
 
