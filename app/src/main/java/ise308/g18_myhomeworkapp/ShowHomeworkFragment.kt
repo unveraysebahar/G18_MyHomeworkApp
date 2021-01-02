@@ -59,19 +59,19 @@ class ShowHomeworkFragment : Fragment() {
         buttonEdit=view.findViewById(R.id.editButton)
         buttonDelete=view.findViewById(R.id.deleteButton)
 
-        animFadeOut= AnimationUtils.loadAnimation(theContext, R.anim.fade_out)
+        loadAnimations()
         animFadeOut.duration=1000
 
         buttonEdit.setOnClickListener{ view ->
             val dialog = EditHomework.newInstance(homeworkToShow, supportFragmentManager, theContext);
             dialog.setTargetFragment(this, 1);
             dialog.show(supportFragmentManager, "")
+            buttonEdit.startAnimation(animFadeOut)
         }
 
         buttonDelete.setOnClickListener{ view ->
             buttonDelete.startAnimation(animFadeOut)
 
-            //delayedSendTimer = Timer()
             val setImageRunnable = Runnable { onDeleteButtonClicked() }
 
             val task: TimerTask = object : TimerTask() {
@@ -79,7 +79,7 @@ class ShowHomeworkFragment : Fragment() {
                     activity!!.runOnUiThread(setImageRunnable)
                 }
             }
-            delayedDeleteButtonClickTimer.schedule(task, 1000);
+            delayedDeleteButtonClickTimer.schedule(task, 1000); //Timer to show that there is an animation when button is clicked so it is not closed right away
         }
 
         tvTitle.text = requireArguments().getString("title")
@@ -93,10 +93,10 @@ class ShowHomeworkFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // Stuff to do, dependent on requestCode and resultCode
-        if (requestCode == 1) { // 1 is an arbitrary number, can be any int
-            // This is the return result of your DialogFragment
-            if (resultCode == 1) { // 1 is an arbitrary number, can be any int
+
+        if (requestCode == 1) {
+
+            if (resultCode == 1) {
                 tvTitle.setText(homeworkToShow?.title);
                 tvCourseTitle.setText(homeworkToShow?.courseTitle);
                 tvDescription.setText(homeworkToShow?.description);
@@ -128,6 +128,11 @@ class ShowHomeworkFragment : Fragment() {
             fragment.theContext = context;
             return fragment
         }
+    }
+
+    fun loadAnimations()
+    {
+        animFadeOut= AnimationUtils.loadAnimation(theContext, R.anim.flash)
     }
 
 }

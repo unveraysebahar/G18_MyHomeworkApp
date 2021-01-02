@@ -13,9 +13,9 @@ class JsonSerializer(
 ) {
 
     @Throws(IOException::class, JSONException::class)
-    fun save(homeworks: ArrayList<Homework>) {
+    fun save(homework: ArrayList<Homework>) {
         val jArray = JSONArray()
-        for (h in homeworks)
+        for (h in homework)
             jArray.put(h.convertToJSON())
         var writer: Writer? = null
         try {

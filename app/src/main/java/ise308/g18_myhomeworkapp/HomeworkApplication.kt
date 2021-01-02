@@ -37,7 +37,7 @@ class HomeworkApplication : Application()  {
             homeworkList = serializer!!.load()
         } catch (e: Exception) {
             homeworkList = ArrayList()
-            Log.e("Error loading homeworks: ", "", e)
+            Log.e("Error loading homework: ", "", e)
         }
     }
 

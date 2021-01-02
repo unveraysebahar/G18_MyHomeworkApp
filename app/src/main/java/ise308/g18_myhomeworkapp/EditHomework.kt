@@ -46,12 +46,6 @@ class EditHomework : DialogFragment(){
                 dialogView.findViewById(R.id.btnSave) as Button;
 
 
-//        editTitle.text = requireArguments().getString("title")
-//        editCourseTitle.text = requireArguments().getString("course title")
-//        editDescription.text = requireArguments().getString("description")
-//        editDeadline.text = requireArguments().getString("deadline")
-//        editWorkload.text = requireArguments().getInt("workload").toString()
-
         editTitle.setText(homeworkToEdit.title);
         editCourseTitle.setText(homeworkToEdit.courseTitle);
         editDescription.setText(homeworkToEdit.description);
@@ -70,9 +64,8 @@ class EditHomework : DialogFragment(){
 
         fun showAlert(message: String) {
             val builder = AlertDialog.Builder(theContext)
-            builder.setTitle("Hatalı veri ğirişi")
+            builder.setTitle("incorrect data entry ")
             builder.setMessage(message)
-//builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
 
             builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                 Toast.makeText(theContext,
@@ -93,9 +86,9 @@ class EditHomework : DialogFragment(){
 
         btnSave.setOnClickListener {
             try {
-                homeworkToEdit.workload = editWorkload.text.toString().toInt() // TODO: Search
+                homeworkToEdit.workload = editWorkload.text.toString().toInt()
             } catch (e: Exception) {
-                showAlert("Workload sayı değeri olmalı");
+                showAlert("Workload must be an integer");
                 return@setOnClickListener;
             }
 
@@ -115,7 +108,7 @@ class EditHomework : DialogFragment(){
             adapter?.notifyItemChanged(homeworkIndex);
             //theHomeworkAdapter.notifyDataSetChanged();
 
-            //val callingActivity = activity as MainActivity?
+
             getTargetFragment()?.onActivityResult(getTargetRequestCode(), 1, getActivity()?.getIntent());
             dismiss()
         }
@@ -132,7 +125,7 @@ class EditHomework : DialogFragment(){
             bundle.putString("course title", homework?.courseTitle)
             bundle.putString("description", homework?.description)
             bundle.putString("deadline", homework?.deadline)
-            bundle.putInt("workload", homework?.workload!!) // TODO: Search
+            bundle.putInt("workload", homework?.workload!!)
             val isDone = if (homework == null) false else homework!!.done
             bundle.putBoolean("done", isDone)
             fragment.arguments = bundle

@@ -56,7 +56,7 @@ class NewHomework : DialogFragment() {
             newHomework.courseTitle = editCourseTitle.text.toString()
             newHomework.description = editDescription.text.toString()
             newHomework.deadline = editDeadline.text.toString()
-            newHomework.workload = editWorkload.text.toString().toInt() // TODO: Search
+            newHomework.workload = editWorkload.text.toString().toInt()
             newHomework.done = checkBoxDone.isChecked
 
             val callingActivity = activity as MainActivity?
