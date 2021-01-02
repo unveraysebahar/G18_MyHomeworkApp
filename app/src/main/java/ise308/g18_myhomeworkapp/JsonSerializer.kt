@@ -1,7 +1,6 @@
 package ise308.g18_myhomeworkapp
 
 import android.content.Context
-import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONTokener

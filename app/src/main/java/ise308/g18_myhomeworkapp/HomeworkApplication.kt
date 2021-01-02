@@ -3,6 +3,12 @@ package ise308.g18_myhomeworkapp
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import org.json.JSONArray
+import org.json.JSONException
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.io.Writer
 
 class HomeworkApplication : Application()  {
 
@@ -17,10 +23,17 @@ class HomeworkApplication : Application()  {
     override fun onCreate() {
         super.onCreate()
 
+        val homeworkJsonFileName = "MyHomework.json";
         ctx = applicationContext;
-        serializer = JsonSerializer("MyHomework.json", applicationContext)
+        serializer = JsonSerializer(homeworkJsonFileName, applicationContext)
 
         try {
+            val file = File(homeworkJsonFileName)
+            val doesHomeworkJsonFileExists = file.exists()
+            if (!doesHomeworkJsonFileExists) {
+                createJsonFileWithEmptyArray(ctx, homeworkJsonFileName)
+            }
+
             homeworkList = serializer!!.load()
         } catch (e: Exception) {
             homeworkList = ArrayList()
@@ -42,6 +55,24 @@ class HomeworkApplication : Application()  {
 
     fun getHomeworkIndex() : Int {
         return currentHomeworkIndex;
+    }
+
+    // create json file with empty array "[]"
+    //@Throws(IOException::class)
+    fun createJsonFileWithEmptyArray(context: Context?, fileName: String) {
+        var writer: Writer? = null
+        try {
+            val out = context?.openFileOutput(
+                    fileName,
+                    Context.MODE_PRIVATE
+            )
+            writer = OutputStreamWriter(out)
+            writer.write("[]")
+        } finally {
+            if (writer != null) {
+                writer.close()
+            }
+        }
     }
 
 }
