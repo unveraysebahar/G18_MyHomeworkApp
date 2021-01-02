@@ -92,8 +92,6 @@ class EditHomework : DialogFragment(){
         }
 
         btnSave.setOnClickListener {
-            Log.e("INFO", "SAVE clicked!!!")
-
             try {
                 homeworkToEdit.workload = editWorkload.text.toString().toInt() // TODO: Search
             } catch (e: Exception) {

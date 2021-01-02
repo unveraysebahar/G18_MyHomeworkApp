@@ -46,7 +46,6 @@ class JsonSerializer(
                 homeworkList.add(Homework(jArray.getJSONObject(i)))
             }
             homeworkList[0].title = homeworkList[0].title;
-            //Log.e("INFO", "//////////// " + homeworkList[0].title)
         } catch (e: FileNotFoundException) {
         } finally {
             reader!!.close()

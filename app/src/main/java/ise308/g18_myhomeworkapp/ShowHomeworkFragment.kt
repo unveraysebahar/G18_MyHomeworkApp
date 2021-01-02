@@ -3,7 +3,6 @@ package ise308.g18_myhomeworkapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,16 +35,14 @@ class ShowHomeworkFragment : Fragment() {
 
     private var delayedDeleteButtonClickTimer:Timer = Timer()
 
-    fun foo() {
+    fun onDeleteButtonClicked() {
         val mainActivity = homeworkToShow?.getMainActivity();
         val homeworkApplication = mainActivity?.application as HomeworkApplication;
         val adapter = mainActivity?.getAdapter();
 
         val homeworkList = mainActivity.getHomeworkList();
         homeworkList.remove(homeworkToShow);
-        //adapter?.notifyItemChanged(homeworkIndex);
         adapter?.notifyDataSetChanged();
-        //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
         activity?.onBackPressed()
     }
 
@@ -66,20 +63,16 @@ class ShowHomeworkFragment : Fragment() {
         animFadeOut.duration=1000
 
         buttonEdit.setOnClickListener{ view ->
-            //Log.e("INFO", "1 //////////// Hooooooooooooo!!!")
             val dialog = EditHomework.newInstance(homeworkToShow, supportFragmentManager, theContext);
             dialog.setTargetFragment(this, 1);
-            //val dialog = EditHomework()
             dialog.show(supportFragmentManager, "")
-            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
         }
 
         buttonDelete.setOnClickListener{ view ->
-            Log.i("INFO", "1 //////////// deleteButton Hooooooooooooo!!!")
             buttonDelete.startAnimation(animFadeOut)
 
             //delayedSendTimer = Timer()
-            val setImageRunnable = Runnable { foo() }
+            val setImageRunnable = Runnable { onDeleteButtonClicked() }
 
             val task: TimerTask = object : TimerTask() {
                 override fun run() {
@@ -87,17 +80,6 @@ class ShowHomeworkFragment : Fragment() {
                 }
             }
             delayedDeleteButtonClickTimer.schedule(task, 1000);
-
-//            val mainActivity = homeworkToShow?.getMainActivity();
-//            val homeworkApplication = mainActivity?.application as HomeworkApplication;
-//            val adapter = mainActivity?.getAdapter();
-//
-//            val homeworkList = mainActivity.getHomeworkList();
-//            homeworkList.remove(homeworkToShow);
-//            //adapter?.notifyItemChanged(homeworkIndex);
-//            adapter?.notifyDataSetChanged();
-//            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
-//            activity?.onBackPressed()
         }
 
         tvTitle.text = requireArguments().getString("title")
