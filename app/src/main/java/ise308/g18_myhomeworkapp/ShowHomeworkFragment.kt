@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import java.util.*
 
 
 class ShowHomeworkFragment : Fragment() {
@@ -26,6 +29,26 @@ class ShowHomeworkFragment : Fragment() {
     private lateinit var tvWorkload : TextView;
     private lateinit var tvDone : TextView;
 
+    private lateinit var animFadeOut: Animation
+
+    private lateinit var buttonDelete:Button
+    private lateinit var buttonEdit:Button
+
+    private var delayedDeleteButtonClickTimer:Timer = Timer()
+
+    fun foo() {
+        val mainActivity = homeworkToShow?.getMainActivity();
+        val homeworkApplication = mainActivity?.application as HomeworkApplication;
+        val adapter = mainActivity?.getAdapter();
+
+        val homeworkList = mainActivity.getHomeworkList();
+        homeworkList.remove(homeworkToShow);
+        //adapter?.notifyItemChanged(homeworkIndex);
+        adapter?.notifyDataSetChanged();
+        //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
+        activity?.onBackPressed()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.homework_frame, container, false)
 
@@ -36,8 +59,13 @@ class ShowHomeworkFragment : Fragment() {
         tvWorkload = view.findViewById<TextView>(R.id.txtWorkload)
         tvDone = view.findViewById<TextView>(R.id.txtDone)
 
-        val editButton = view.findViewById<Button>(R.id.editButton)
-        editButton.setOnClickListener{ view ->
+        buttonEdit=view.findViewById(R.id.editButton)
+        buttonDelete=view.findViewById(R.id.deleteButton)
+
+        animFadeOut= AnimationUtils.loadAnimation(theContext, R.anim.fade_out)
+        animFadeOut.duration=1000
+
+        buttonEdit.setOnClickListener{ view ->
             //Log.e("INFO", "1 //////////// Hooooooooooooo!!!")
             val dialog = EditHomework.newInstance(homeworkToShow, supportFragmentManager, theContext);
             dialog.setTargetFragment(this, 1);
@@ -46,20 +74,30 @@ class ShowHomeworkFragment : Fragment() {
             //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
         }
 
-        val deleteButton = view.findViewById<Button>(R.id.deleteButton)
-        deleteButton.setOnClickListener{ view ->
-            Log.e("INFO", "1 //////////// deleteButton Hooooooooooooo!!!")
+        buttonDelete.setOnClickListener{ view ->
+            Log.i("INFO", "1 //////////// deleteButton Hooooooooooooo!!!")
+            buttonDelete.startAnimation(animFadeOut)
 
-            val mainActivity = homeworkToShow?.getMainActivity();
-            val homeworkApplication = mainActivity?.application as HomeworkApplication;
-            val adapter = mainActivity?.getAdapter();
+            //delayedSendTimer = Timer()
+            val setImageRunnable = Runnable { foo() }
 
-            val homeworkList = mainActivity.getHomeworkList();
-            homeworkList.remove(homeworkToShow);
-            //adapter?.notifyItemChanged(homeworkIndex);
-            adapter?.notifyDataSetChanged();
-            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
-            activity?.onBackPressed()
+            val task: TimerTask = object : TimerTask() {
+                override fun run() {
+                    activity!!.runOnUiThread(setImageRunnable)
+                }
+            }
+            delayedDeleteButtonClickTimer.schedule(task, 1000);
+
+//            val mainActivity = homeworkToShow?.getMainActivity();
+//            val homeworkApplication = mainActivity?.application as HomeworkApplication;
+//            val adapter = mainActivity?.getAdapter();
+//
+//            val homeworkList = mainActivity.getHomeworkList();
+//            homeworkList.remove(homeworkToShow);
+//            //adapter?.notifyItemChanged(homeworkIndex);
+//            adapter?.notifyDataSetChanged();
+//            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
+//            activity?.onBackPressed()
         }
 
         tvTitle.text = requireArguments().getString("title")
