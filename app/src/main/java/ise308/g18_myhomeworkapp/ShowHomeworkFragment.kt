@@ -1,22 +1,66 @@
 package ise308.g18_myhomeworkapp
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+
 
 class ShowHomeworkFragment : Fragment() {
 
+    private lateinit var supportFragmentManager: FragmentManager;
+    private var homeworkToShow: Homework? = null;
+    private lateinit var theContext: Context;
+
+    private lateinit var tvTitle : TextView;
+    private lateinit var tvCourseTitle : TextView;
+    private lateinit var tvDescription : TextView;
+    private lateinit var tvDeadline : TextView;
+    private lateinit var tvWorkload : TextView;
+    private lateinit var tvDone : TextView;
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.homework_frame, container, false)
-        val tvTitle = view.findViewById<TextView>(R.id.txtTitle)
-        val tvCourseTitle = view.findViewById<TextView>(R.id.txtCourseTitle)
-        val tvDescription = view.findViewById<TextView>(R.id.txtDescription)
-        val tvDeadline = view.findViewById<TextView>(R.id.txtDeadline)
-        val tvWorkload = view.findViewById<TextView>(R.id.txtWorkload)
-        val tvDone = view.findViewById<TextView>(R.id.txtDone)
+
+        tvTitle = view.findViewById<TextView>(R.id.txtTitle)
+        tvCourseTitle = view.findViewById<TextView>(R.id.txtCourseTitle)
+        tvDescription = view.findViewById<TextView>(R.id.txtDescription)
+        tvDeadline = view.findViewById<TextView>(R.id.txtDeadline)
+        tvWorkload = view.findViewById<TextView>(R.id.txtWorkload)
+        tvDone = view.findViewById<TextView>(R.id.txtDone)
+
+        val editButton = view.findViewById<Button>(R.id.editButton)
+        editButton.setOnClickListener{ view ->
+            //Log.e("INFO", "1 //////////// Hooooooooooooo!!!")
+            val dialog = EditHomework.newInstance(homeworkToShow, supportFragmentManager, theContext);
+            dialog.setTargetFragment(this, 1);
+            //val dialog = EditHomework()
+            dialog.show(supportFragmentManager, "")
+            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
+        }
+
+        val deleteButton = view.findViewById<Button>(R.id.deleteButton)
+        deleteButton.setOnClickListener{ view ->
+            Log.e("INFO", "1 //////////// deleteButton Hooooooooooooo!!!")
+
+            val mainActivity = homeworkToShow?.getMainActivity();
+            val homeworkApplication = mainActivity?.application as HomeworkApplication;
+            val adapter = mainActivity?.getAdapter();
+
+            val homeworkList = mainActivity.getHomeworkList();
+            homeworkList.remove(homeworkToShow);
+            //adapter?.notifyItemChanged(homeworkIndex);
+            adapter?.notifyDataSetChanged();
+            //Log.e("INFO", "2//////////// Hooooooooooooo!!!")
+            activity?.onBackPressed()
+        }
 
         tvTitle.text = requireArguments().getString("title")
         tvCourseTitle.text = requireArguments().getString("course title")
@@ -28,17 +72,40 @@ class ShowHomeworkFragment : Fragment() {
         return view
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // Stuff to do, dependent on requestCode and resultCode
+        if (requestCode == 1) { // 1 is an arbitrary number, can be any int
+            // This is the return result of your DialogFragment
+            if (resultCode == 1) { // 1 is an arbitrary number, can be any int
+                tvTitle.setText(homeworkToShow?.title);
+                tvCourseTitle.setText(homeworkToShow?.courseTitle);
+                tvDescription.setText(homeworkToShow?.description);
+                tvDeadline.setText(homeworkToShow?.deadline);
+                tvWorkload.setText(homeworkToShow?.workload!!.toString());
+                var isDone = if (homeworkToShow == null) false else homeworkToShow!!.done
+                if(isDone){
+                    tvDone.visibility = View.VISIBLE
+                } else {
+                    tvDone.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     companion object {
-        fun newInstance(homework : Homework) : ShowHomeworkFragment {
+        fun newInstance(homework: Homework?, fragmentManager: FragmentManager, context: Context) : ShowHomeworkFragment {
             val fragment = ShowHomeworkFragment()
             val bundle = Bundle(1)
-            bundle.putString("title", homework.title)
-            bundle.putString("course title", homework.courseTitle)
-            bundle.putString("description", homework.description)
-            bundle.putString("deadline", homework.deadline)
-            bundle.putInt("workload", homework.workload!!) // TODO: Search
-            bundle.putBoolean("done", homework.done)
+            bundle.putString("title", homework?.title)
+            bundle.putString("course title", homework?.courseTitle)
+            bundle.putString("description", homework?.description)
+            bundle.putString("deadline", homework?.deadline)
+            bundle.putInt("workload", homework?.workload!!) // TODO: Search
+            bundle.putBoolean("done", homework?.done)
             fragment.arguments = bundle
+            fragment.supportFragmentManager = fragmentManager
+            fragment.homeworkToShow = homework;
+            fragment.theContext = context;
             return fragment
         }
     }

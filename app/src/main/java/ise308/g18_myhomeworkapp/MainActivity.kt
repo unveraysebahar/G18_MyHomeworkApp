@@ -1,21 +1,26 @@
 package ise308.g18_myhomeworkapp
 
+import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private var serializer: JsonSerializer? = null
     private var homeworkList = ArrayList<Homework>()
@@ -38,14 +43,9 @@ class MainActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "")
         }
 
-        serializer = JsonSerializer("MyHomework.json", applicationContext)
-
-        try {
-            homeworkList = serializer!!.load()
-        } catch (e: Exception) {
-            homeworkList = ArrayList()
-            Log.e("Error loading homeworks: ", "", e)
-        }
+        val homeworkApplication = this.application as HomeworkApplication;
+        homeworkList = homeworkApplication.getHomeworkList();
+        serializer = homeworkApplication.getSerializer()
 
         recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
         adapter = HomeworkAdapter(this, homeworkList)
@@ -58,16 +58,29 @@ class MainActivity : AppCompatActivity() {
         recyclerView!!.itemAnimator = DefaultItemAnimator()
 
         recyclerView!!.addItemDecoration(
-            DividerItemDecoration(this,
-                LinearLayoutManager.VERTICAL)
+                DividerItemDecoration(this,
+                        LinearLayoutManager.VERTICAL)
         )
 
         recyclerView!!.adapter = adapter
 
     }
 
-    fun createNewHomework(newHomework: Homework) {
+    override fun onItemClicked(homework: Homework) {
+        //Toast.makeText(this,"Title ${homework.title} \n Course Title:${homework.courseTitle}",Toast.LENGTH_LONG)
+        //        .show()
+        val homeworkId = homeworkList.indexOf(homework);
+        val homeworkApplication = this.application as HomeworkApplication;
+        homeworkApplication.setHomeworkIndex(homeworkId);
 
+        val intentToHomeworkPager= Intent(this, HomeworkPagerActivity::class.java)
+        //intent.putExtra("HOMEWORK_ID", homeworkId);
+        startActivity(intentToHomeworkPager)
+        Log.i("INFO",homework.title.toString())
+    }
+
+    fun createNewHomework(newHomework: Homework) {
+        newHomework.setMainActivity(this);
         homeworkList!!.add(newHomework)
         adapter!!.notifyDataSetChanged()
 
@@ -104,6 +117,14 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         saveHomeworks()
+    }
+
+    fun getHomeworkList() : ArrayList<Homework> {
+        return  homeworkList;
+    }
+
+    fun getAdapter() : HomeworkAdapter? {
+        return adapter;
     }
 
 }

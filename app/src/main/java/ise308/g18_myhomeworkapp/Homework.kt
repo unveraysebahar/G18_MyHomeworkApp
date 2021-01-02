@@ -6,6 +6,8 @@ import java.util.*
 
 class Homework {
 
+    private lateinit var mainActivity: MainActivity;
+
     var title: String? = null
     var courseTitle: String? = null
     var description: String? = null
@@ -31,6 +33,14 @@ class Homework {
     }
 
     constructor() {
+    }
+
+    fun setMainActivity(ma: MainActivity) {
+        mainActivity = ma;
+    }
+
+    fun getMainActivity() : MainActivity {
+        return mainActivity;
     }
 
     @Throws(JSONException::class)

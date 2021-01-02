@@ -1,20 +1,17 @@
 package ise308.g18_myhomeworkapp
 
 import android.content.Context
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
-import java.io.IOException
-import java.io.OutputStreamWriter
-import java.io.Writer
 import org.json.JSONTokener
-import java.io.BufferedReader
-import java.io.FileNotFoundException
-import java.io.InputStreamReader
-import kotlin.collections.ArrayList
+import java.io.*
+import java.util.stream.Collectors
 
-class JsonSerializer (
+class JsonSerializer(
         private val filename: String,
-        private val context: Context) {
+        private val context: Context
+) {
 
     @Throws(IOException::class, JSONException::class)
     fun save(homeworks: ArrayList<Homework>) {
@@ -23,8 +20,10 @@ class JsonSerializer (
             jArray.put(h.convertToJSON())
         var writer: Writer? = null
         try {
-            val out = context.openFileOutput(filename,
-                    Context.MODE_PRIVATE)
+            val out = context.openFileOutput(
+                    filename,
+                    Context.MODE_PRIVATE
+            )
             writer = OutputStreamWriter(out)
             writer.write(jArray.toString())
         } finally {
@@ -41,15 +40,13 @@ class JsonSerializer (
         try {
             val `in` = context.openFileInput(filename)
             reader = BufferedReader(InputStreamReader(`in`))
-            val jsonString = StringBuilder()
-            for (line in reader.readLine()) {
-                jsonString.append(line)
-            }
-            val jArray = JSONTokener(jsonString.toString()).
-            nextValue() as JSONArray
+            val jsonContent : String =  reader.lines().collect(Collectors.joining());
+            val jArray = JSONTokener(jsonContent).nextValue() as JSONArray
             for (i in 0 until jArray.length()) {
                 homeworkList.add(Homework(jArray.getJSONObject(i)))
             }
+            homeworkList[0].title = homeworkList[0].title;
+            //Log.e("INFO", "//////////// " + homeworkList[0].title)
         } catch (e: FileNotFoundException) {
         } finally {
             reader!!.close()

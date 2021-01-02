@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ise308.g18_myhomeworkapp">
 
     <application
@@ -8,7 +9,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.G18_MyHomeworkApp">
+        android:theme="@style/Theme.G18_MyHomeworkApp"
+        android:name=".HomeworkApplication"
+        >
+
         <activity android:name=".HomeworkPagerActivity" />
         <activity
             android:name=".MainActivity"

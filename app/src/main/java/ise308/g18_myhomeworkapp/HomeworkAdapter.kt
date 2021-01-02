@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,8 +26,19 @@ class HomeworkAdapter(
             view.setOnClickListener(this)
         }
         override fun onClick(view: View) {
-            val intentToHomeworkPager= Intent(view!!.context, HomeworkPagerActivity::class.java)
-            view.context.startActivity(intentToHomeworkPager)
+            //val intentToHomeworkPager= Intent(view!!.context, HomeworkPagerActivity::class.java)
+            //view.context.startActivity(intentToHomeworkPager)
+        }
+
+        fun bind(item: Homework, clickListener: OnItemClickListener) {
+            title.text = if (item.title!!.length <= 10) item.title else item.title!!.substring(0, 10); // Showing the top 10 characters
+            courseTitle.text = item.courseTitle
+            deadline.text = item.deadline
+
+            itemView.setOnClickListener {
+                clickListener.onItemClicked(item)
+            }
+
         }
     }
 
@@ -52,11 +64,15 @@ class HomeworkAdapter(
 
         val homework = homeworkList[position]
 
-        holder.title.text = homework.title!!.substring(0,10) // Showing the top 10 characters
+//        holder.title.text = if (homework.title!!.length <= 10) homework.title else homework.title!!.substring(0, 10); // Showing the top 10 characters
+//
+//        holder.courseTitle.text = homework.courseTitle
+//
+//        holder.deadline.text = homework.deadline
 
-        holder.courseTitle.text = homework.courseTitle
+        homework.setMainActivity(mainActivity);
 
-        holder.deadline.text = homework.deadline
+        holder.bind(homework, mainActivity)
 
         when {
             homework.done -> holder.done.text =
@@ -65,4 +81,8 @@ class HomeworkAdapter(
 
     }
 
+}
+
+interface OnItemClickListener{
+    fun onItemClicked(homework: Homework)
 }
