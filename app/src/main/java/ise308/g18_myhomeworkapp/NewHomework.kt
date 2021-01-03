@@ -50,7 +50,6 @@ class NewHomework : DialogFragment() {
 
             val newHomework = Homework() // Creating a new homework
 
-            // Adjusting properties to match the user's input on the form
 
             newHomework.title = editTitle.text.toString()
             newHomework.courseTitle = editCourseTitle.text.toString()

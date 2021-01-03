@@ -120,7 +120,7 @@ class ShowHomeworkFragment : Fragment() {
             bundle.putString("course title", homework?.courseTitle)
             bundle.putString("description", homework?.description)
             bundle.putString("deadline", homework?.deadline)
-            bundle.putInt("workload", homework?.workload!!) // TODO: Search
+            bundle.putInt("workload", homework?.workload!!) //
             bundle.putBoolean("done", homework?.done)
             fragment.arguments = bundle
             fragment.supportFragmentManager = fragmentManager

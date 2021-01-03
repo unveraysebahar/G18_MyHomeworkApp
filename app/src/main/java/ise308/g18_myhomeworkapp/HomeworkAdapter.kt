@@ -26,8 +26,7 @@ class HomeworkAdapter(
             view.setOnClickListener(this)
         }
         override fun onClick(view: View) {
-            //val intentToHomeworkPager= Intent(view!!.context, HomeworkPagerActivity::class.java)
-            //view.context.startActivity(intentToHomeworkPager)
+
         }
 
         fun bind(item: Homework, clickListener: OnItemClickListener) {
@@ -63,12 +62,6 @@ class HomeworkAdapter(
         holder: ListItemHolder, position: Int) {
 
         val homework = homeworkList[position]
-
-//        holder.title.text = if (homework.title!!.length <= 10) homework.title else homework.title!!.substring(0, 10); // Showing the top 10 characters
-//
-//        holder.courseTitle.text = homework.courseTitle
-//
-//        holder.deadline.text = homework.deadline
 
         homework.setMainActivity(mainActivity);
 

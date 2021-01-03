@@ -27,13 +27,7 @@ class HomeworkPagerActivity : AppCompatActivity() {
             homeworkFragmentList.add(ShowHomeworkFragment.newInstance(homework, supportFragmentManager, this))
         }
 
-//        val extra: Bundle? = intent.extras
-//        val homeworkId = extra?.getInt("HOMEWORK_ID");
-//        val homeworkId = intent.getIntExtra("HOMEWORK_ID", -1);
-//        if (homeworkId != -1) {
-//            val homework = homeworkList?.get(homeworkId!!);
-//            ShowHomeworkFragment.newInstance(homework, supportFragmentManager, this)
-//        }
+
 
         val homeworkIndex = homeworkApplication.getHomeworkIndex();
 

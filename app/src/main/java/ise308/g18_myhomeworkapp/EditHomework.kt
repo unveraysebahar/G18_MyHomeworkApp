@@ -64,7 +64,7 @@ class EditHomework : DialogFragment(){
 
         fun showAlert(message: String) {
             val builder = AlertDialog.Builder(theContext)
-            builder.setTitle("incorrect data entry ")
+            builder.setTitle("Incorrect data entry ")
             builder.setMessage(message)
 
             builder.setPositiveButton(android.R.string.yes) { dialog, which ->
@@ -101,12 +101,11 @@ class EditHomework : DialogFragment(){
 
             val mainActivity = homeworkToEdit.getMainActivity();
             val homeworkApplication = mainActivity.application as HomeworkApplication;
-            //val homeworkList2 = homeworkApplication.getHomeworkList();
             val adapter = mainActivity.getAdapter();
             val homeworkList = mainActivity.getHomeworkList();
             val homeworkIndex = homeworkList.indexOf(homeworkToEdit);
             adapter?.notifyItemChanged(homeworkIndex);
-            //theHomeworkAdapter.notifyDataSetChanged();
+
 
 
             getTargetFragment()?.onActivityResult(getTargetRequestCode(), 1, getActivity()?.getIntent());

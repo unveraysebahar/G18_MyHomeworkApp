@@ -67,8 +67,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClicked(homework: Homework) {
-        //Toast.makeText(this,"Title ${homework.title} \n Course Title:${homework.courseTitle}",Toast.LENGTH_LONG)
-        //        .show()
         val homeworkId = homeworkList.indexOf(homework);
         val homeworkApplication = this.application as HomeworkApplication;
         homeworkApplication.setHomeworkIndex(homeworkId);
@@ -101,14 +99,12 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 Context.MODE_PRIVATE)
         showDividers = prefs.getBoolean(
                 "dividers", true)
-        // Add a neat dividing line between list items
         if (showDividers)
             recyclerView!!.addItemDecoration(
                     DividerItemDecoration(
                             this, LinearLayoutManager.VERTICAL))
         else {
-            // check there are some dividers
-            // or the app will crash
+
             if (recyclerView!!.itemDecorationCount > 0)
                 recyclerView!!.removeItemDecorationAt(0)
         }
